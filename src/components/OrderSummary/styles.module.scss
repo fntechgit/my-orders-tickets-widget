@@ -1,0 +1,44 @@
+.orderSummaryWrapper {
+  border: 1px solid#BDBDBD;
+  padding: 15px;
+  border-radius: 4px;
+  h3 {
+    font-size: 1.5em;
+    margin: 0 0 15px 0;
+  }
+
+  .orderSummaryPurchasedNumber {
+    color: #666666 !important;
+    .orderOrderNumber {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100px !important;
+      display: inline-block;
+      direction: rtl;
+    }
+  }
+  .orderSummaryPurchasedInfo {
+    padding: 15px 0;
+    .orderDetailsTickets {
+      list-style-type: none;
+      margin-left: 0;
+      padding-left: 0;
+    }
+    .orderDetailsMmount {
+      font-size: 1em;
+    }
+  }
+
+  .orderSummaryTable {
+    font-size: 1.1em;
+  }
+}
+.orderSummaryButton {
+  font-size: 1.2em !important;
+  width: 100%;
+  margin-top: 8px !important;
+  display: block;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}

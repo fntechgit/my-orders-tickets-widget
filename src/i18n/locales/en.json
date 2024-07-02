@@ -197,7 +197,10 @@
     "attendee_status_unassigned": "Attendee unassigned",
     "view_ticket": "View Ticket",
     "reassign_ticket": "Reassign",
-    "assign_ticket": "Assign Ticket"
+    "assign_ticket": "Assign Ticket",
+    "status_unassigned": "Unassigned",
+    "status_incomplete": "Incomplete",
+    "status_refund_requested": "Refund Requested"
   },
   "nav_bar": {
     "my-orders": "My Orders",

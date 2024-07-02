@@ -58,11 +58,10 @@ export const ONE = 1;
 export const FIVE = 5;
 
 // ORDERS ACTIONS
-export const getUserOrders = ({
-  page = ONE,
-  perPage = FIVE,
-}) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
-  const { widgetState: { summit } } = getState();
+export const getUserOrders = ({ page = ONE, perPage = FIVE }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
+  const {
+    widgetState: { summit },
+  } = getState();
   const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
   if (!accessToken) return Promise.reject();
   dispatch(startLoading());
@@ -90,13 +89,7 @@ export const getUserOrders = ({
     });
 };
 
-export const setActiveOrderId = (
-  orderId,
-) => async (
-  dispatch,
-) => dispatch(
-  createAction(SET_ACTIVE_ORDER_ID)(orderId),
-);
+export const setActiveOrderId = (orderId) => async (dispatch) => dispatch(createAction(SET_ACTIVE_ORDER_ID)(orderId));
 
 // USER ACTIONS
 export const setUser = (user) => (dispatch) => dispatch(createAction(SET_USER)(user));
@@ -141,17 +134,7 @@ export const updateProfile = (profile) => async (dispatch, { idpBaseUrl, loginUr
 //   return normalizedEntity;
 // };
 
-export const getUserTickets = ({
-  page = ONE,
-  perPage = FIVE,
-}) => async (
-  dispatch,
-  getState,
-  {
-    apiBaseUrl,
-    loginUrl,
-  },
-) => {
+export const getUserTickets = ({ page = ONE, perPage = FIVE }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
   const {
     userState: { userProfile },
     summit,
@@ -188,18 +171,8 @@ export const getUserTickets = ({
 };
 
 export const getTicketsByOrder = ({
-  orderId,
-  page = ONE,
-  perPage = FIVE,
-  next = false,
-}) => async (
-  dispatch,
-  getState,
-  {
-    apiBaseUrl,
-    loginUrl,
-  },
-) => {
+  orderId, page = ONE, perPage = FIVE, next = false,
+}) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
   dispatch(startLoading());
   const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
   if (!accessToken) return null;
@@ -213,7 +186,9 @@ export const getTicketsByOrder = ({
   };
   return getRequest(
     null,
-    next ? createAction(GET_NEXT_TICKETS_BY_ORDER) : createAction(GET_TICKETS_BY_ORDER),
+    next
+      ? createAction(GET_NEXT_TICKETS_BY_ORDER)
+      : createAction(GET_TICKETS_BY_ORDER),
     `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,
     authErrorHandler,
   )(params)(dispatch)
@@ -228,15 +203,7 @@ export const getTicketsByOrder = ({
     });
 };
 
-export const resendNotification = (
-  ticket,
-) => async (
-  dispatch,
-  {
-    apiBaseUrl,
-    loginUrl,
-  },
-) => {
+export const resendNotification = (ticket) => async (dispatch, { apiBaseUrl, loginUrl }) => {
   const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
 
   if (!accessToken) return null;
@@ -267,16 +234,7 @@ export const resendNotification = (
     });
 };
 
-export const refundTicket = ({
-  ticket,
-}) => async (
-  dispatch,
-  getState,
-  {
-    apiBaseUrl,
-    loginUrl,
-  },
-) => {
+export const refundTicket = ({ ticket }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
   const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
 
   if (!accessToken) return null;

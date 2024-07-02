@@ -1,0 +1,26 @@
+.ticketStatusContainer {
+  .buttonRefundRequested {
+    width: 100%;
+    padding: 3px 10px;
+    color: #000000;
+    font-size: 0.9em;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  .buttonIncomplete {
+    padding: 3px 10px;
+    font-size: 0.9em;
+    border-radius: 16px;
+    color: #ff9800;
+    border: 1px solid #ff9800;
+    background-color: #ffffff;
+  }
+  .buttonUnassigned {
+    padding: 3px 10px;
+    font-size: 0.9em;
+    border-radius: 16px;
+    color: #ef5350;
+    border: 1px solid #ef5350;
+    background-color: #ffffff;
+  }
+}

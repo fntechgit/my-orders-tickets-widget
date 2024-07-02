@@ -77,13 +77,11 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
     case GET_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
       const {
-        data,
-        total,
-        page,
-        per_page,
-        last_page,
+        data, total, page, per_page, last_page,
       } = payload.response;
-      const orderToUpdate = memberOrders.filter((o) => o.id === data[0].order_id);
+      const orderToUpdate = memberOrders.filter(
+        (o) => o.id === data[0].order_id,
+      );
       orderToUpdate[0].memberTickets = data;
       memberOrders = memberOrders.map((mo) => (mo.id === orderToUpdate.id ? orderToUpdate : mo));
       return {
@@ -98,8 +96,13 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
     case GET_NEXT_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
       const { data } = payload.response;
-      const orderToUpdate = memberOrders.filter((o) => o.id === data[0].order_id);
-      orderToUpdate[0].memberTickets = [...orderToUpdate[0].memberTickets, ...data];
+      const orderToUpdate = memberOrders.filter(
+        (o) => o.id === data[0].order_id,
+      );
+      orderToUpdate[0].memberTickets = [
+        ...orderToUpdate[0].memberTickets,
+        ...data,
+      ];
       memberOrders = memberOrders.map((mo) => (mo.id === orderToUpdate.id ? orderToUpdate : mo));
       return { ...state, memberOrders };
     }

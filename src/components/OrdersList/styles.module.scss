@@ -1,0 +1,101 @@
+.orderTicketContainer {
+  &:not(:last-child) {
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 20px;
+  }
+  .label {
+    color: #666666 !important;
+    font-weight: normal;
+    font-size: 0.9em;
+    padding: 0;
+  }
+  .ticketTicketType {
+    h4 {
+      font-size: 1.5em;
+    }
+  }
+  .ticketOwnerEmail {
+    font-size: 1.1em;
+  }
+  svg.copyIcon {
+    color: #2196f3;
+    margin-left: 5px;
+    margin-bottom: -2px;
+    cursor: pointer;
+  }
+  .ticketListContainer {
+    .ticketNoContainer {
+      margin: 3px 0;
+      font-size: 0.9em;
+      span {
+        display: inline-block;
+      }
+      .ticketTicketNumber {
+        display: inline-block;
+        width: 90px;
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        direction: rtl;
+        margin-bottom: -5px;
+      }
+    }
+    .viewMoreButton {
+      display: block;
+      padding: 5px 10px;
+      color: #000000;
+      font-size: 1.3em;
+      text-decoration: underline;
+      margin: 0 auto;
+      text-transform: none;
+      cursor: pointer;
+    }
+    .viewTicketButton {
+      padding: 5px 10px;
+      background-color: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
+      font-size: 1em;
+      margin-right: 10px;
+    }
+    .reassignButton {
+      padding: 5px 10px;
+      color: #000000;
+      display: inline-block;
+      border: 1px solid #000000;
+      font-size: 1em;
+    }
+    .assignTicketButton {
+      padding: 5px 10px;
+      background-color: #000000;
+      color: #ffffff;
+      border: 1px solid #000000;
+      font-size: 1em;
+      margin-right: 10px;
+    }
+  }
+  .orderWrapper {
+    padding: 0;
+    margin: 0;
+    border-radius: 3px;
+    border: 1px solid #bdbdbd;
+    max-width: 643px !important;
+    position: relative;
+    min-height: 178px;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    &:after {
+      background: #ffffff;
+      position: absolute;
+      content: '';
+      right: -1px;
+      top: 35%;
+      width: 25px;
+      height: 50px;
+      border-radius: 150px 0 0 150px;
+      border: 1px solid #bdbdbd;
+      border-right-color: transparent;
+    }
+  }
+}

@@ -38,5 +38,5 @@
     "no-plusplus": "off",
     "no-continue": "off"
   },
-  "ignorePatterns": [ "src/__mocks__" ] 
+  "ignorePatterns": ["src/__mocks__"]
 }

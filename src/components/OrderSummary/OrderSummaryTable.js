@@ -4,8 +4,9 @@ import { useTranslation } from "react-i18next";
 import { Grid, Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { calculateOrderTotals, formatCurrency } from "../../utils";
+import * as styles from "./styles.module.scss";
 
-export function OrderSummaryTable({ order, summit, tickets }) {
+function OrderSummaryTable({ order, summit, tickets }) {
   const { t } = useTranslation();
   const {
     discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary,
@@ -13,7 +14,7 @@ export function OrderSummaryTable({ order, summit, tickets }) {
   const hundred = 100;
 
   return (
-    <Box className="order-summary-table">
+    <Box className={styles.orderSummaryTable}>
       {ticketSummary?.length > 0 && (
         <>
           {ticketSummary.map((ticket) => {
@@ -84,7 +85,7 @@ export function OrderSummaryTable({ order, summit, tickets }) {
         </Grid>
       )}
       <Divider />
-      <Grid container sx={{ pt: 1, pb: 1 }} className="order-total">
+      <Grid container sx={{ pt: 1, pb: 1 }}>
         <Grid xs={8} item>
           {t("order_summary.total")}
         </Grid>
@@ -106,3 +107,5 @@ OrderSummaryTable.propTypes = {
   summit: PropTypes.object,
   tickets: PropTypes.arrayOf(Object),
 };
+
+export default OrderSummaryTable;
