@@ -1,8 +1,8 @@
-import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
-import en from './locales/en.json'
-import es from './locales/es.json'
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import en from "./locales/en.json";
+import es from "./locales/es.json";
 
 // import Backend from 'i18next-http-backend';
 // don't want to use this?
@@ -22,15 +22,15 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    fallbackLng: 'en',
+    fallbackLng: "en",
     debug: true,
     resources: {
       en: { translation: en },
-      es: { translation: es }
+      es: { translation: es },
     },
     interpolation: {
-      escapeValue: false // not needed for react as it escapes by default
-    }
-  })
+      escapeValue: false, // not needed for react as it escapes by default
+    },
+  });
 
-export default i18n
+export default i18n;

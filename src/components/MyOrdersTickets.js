@@ -1,54 +1,47 @@
-import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector, shallowEqual } from 'react-redux'
-import OrdersList from './OrdersList'
-import { getSummitFormattedDate } from '../utils'
-import { getUserOrders, getUserTickets } from '../actions'
-import { Box } from '@mui/material'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { Box } from "@mui/material";
+import OrdersList from "./OrdersList/OrdersList";
+import { getSummitFormattedDate } from "../utils";
+import { getUserOrders } from "../actions";
 
-export const MyOrdersTickets = (props) => {
-  const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const [isInitializing, setIsInitializing] = useState(true)
-  const state = useSelector((state) => state || {}, shallowEqual)
-
-  // console.log('state', state);
+function MyOrdersTickets() {
+  const dispatch = useDispatch();
+  const {
+    summit,
+    summit:
+    {
+      name,
+    },
+    memberOrders,
+    current_page,
+    per_page,
+  } = useSelector((state) => state.widgetState || {}, shallowEqual);
   const fetchData = async () => {
     dispatch(
-      getUserOrders({ page: state.current_page, perPage: state.per_page })
+      getUserOrders({ page: current_page, perPage: per_page }),
     )
-      .then(() => {
-        dispatch(
-          getUserTickets({ page: state.current_page, perPage: state.per_page })
-        )
-          .then(() => setIsInitializing(false))
-          .catch((e) => {
-            console.log(e)
-            setIsInitializing(false)
-          })
-      })
       .catch((e) => {
-        console.log(e)
-        setIsInitializing(false)
-      })
-  }
+        console.log(e);
+      });
+  };
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
   return (
     <>
-      <Box className='widget-header'>
-        <h2 className='summit-title'>{state.summit.name}</h2>
-        <h3 className='summit-date'>{getSummitFormattedDate(state.summit)}</h3>
+      <Box className="widget-header">
+        <h2 className="summit-title">{name}</h2>
+        <h3 className="summit-date">{getSummitFormattedDate(summit)}</h3>
       </Box>
-      <OrdersList
-        {...props}
-        orders={state.memberOrders}
-        summit={state.summit}
-        tickets={state.memberTickets}
-      />
+      {memberOrders?.map((order) => (
+        <OrdersList
+          key={order.id}
+          order={order}
+          summit={summit}
+        />
+      ))}
     </>
-  )
+  );
 }
-
-export default MyOrdersTickets
+export default MyOrdersTickets;

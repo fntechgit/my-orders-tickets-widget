@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
-import WidgetReducer from './reducer'
-import { configureStore } from '@reduxjs/toolkit'
+import { useMemo } from "react";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -9,72 +8,60 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER
-} from 'redux-persist'
-import thunk from 'redux-thunk'
-import storage from 'redux-persist/lib/storage'
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { combineReducers } from "redux";
+import WidgetReducer from "./reducer";
 
 export const getStore = ({
   clientId,
   loginUrl,
   supportEmail,
-  getAccessToken,
   getUserProfile,
   summit,
-  user,
-  apiBaseUrl
+  apiBaseUrl,
 }) => {
-  const persistConfig = {
-    key: 'root',
-    version: 1,
-    storage
-  }
+  // to add other reducers later
+  const reducers = combineReducers({
+    widgetState: WidgetReducer,
+  });
 
   const store = configureStore({
-    reducer: persistReducer(persistConfig, WidgetReducer),
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        thunk: {
-          extraArgument: {
-            clientId,
-            apiBaseUrl,
-            summit,
-            loginUrl,
-            supportEmail,
-            getAccessToken,
-            getUserProfile
-          }
+    reducer: persistReducer(
+      {
+        key: "root",
+        storage,
+      },
+      reducers,
+    ),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      thunk: {
+        extraArgument: {
+          clientId,
+          apiBaseUrl,
+          summit,
+          loginUrl,
+          supportEmail,
+          getUserProfile,
         },
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-        }
-      })
-  })
+      },
+      immutableCheck: false,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  });
 
-  return store
-}
-
-export const getPersistor = (store) => {
-  const onRehydrateComplete = () => {
-    const { loggedUserState } = store.getState()
-
-    // repopulate access token on global access variable
-    window.accessToken = loggedUserState?.accessToken
-    window.idToken = loggedUserState?.idToken
-    window.sessionState = loggedUserState?.sessionState
-  }
-
-  const persistor = persistStore(store, null, onRehydrateComplete)
-
-  return persistor
-}
+  return store;
+};
 
 export const useInitStore = (config) => {
-  const store = useMemo(() => getStore(config), [])
-  const persistor = useMemo(() => getPersistor(store), [store])
+  const store = useMemo(() => getStore(config), []);
+  const persistor = useMemo(() => persistStore(store), [store]);
 
   return {
     store,
-    persistor
-  }
-}
+    persistor,
+  };
+};
