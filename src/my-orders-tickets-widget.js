@@ -9,48 +9,49 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
-import React, { useEffect } from 'react'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-import { useInitStore } from './store'
-import { useTranslation } from 'react-i18next'
-import MyOrdersTickets from './components/MyOrdersTickets'
-import { RESET_STATE, setSummit } from './actions'
+ * */
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { useTranslation } from "react-i18next";
+import { useInitStore } from "./store";
+import MyOrdersTickets from "./components/MyOrdersTickets";
+import { RESET_STATE, setSummit, setUser } from "./actions";
 
-const MyOrdersMyTicketsWidget = (props) => {
+function MyOrdersMyTicketsWidget(props) {
   const {
     loginUrl,
     supportEmail,
-    getAccessToken,
     getUserProfile,
     summit,
     apiBaseUrl,
-    user
-  } = props
-  const { t } = useTranslation()
+    user,
+  } = props;
+  const { t } = useTranslation();
 
   const { store, persistor } = useInitStore({
     loginUrl,
     supportEmail,
-    getAccessToken,
     getUserProfile,
     summit,
     user,
-    apiBaseUrl
-  })
+    apiBaseUrl,
+  });
 
   const handleBeforeLift = () => {
-    const params = new URLSearchParams(window.location.search)
-    const flush = params.has('flushState')
-    if (flush) store.dispatch({ type: RESET_STATE, payload: null })
-  }
+    const params = new URLSearchParams(window.location.search);
+    const flush = params.has("flushState");
+    if (flush) store.dispatch({ type: RESET_STATE, payload: null });
+  };
 
   useEffect(() => {
-    store.dispatch(setSummit(summit))
+    store.dispatch(setSummit(summit));
+  }, [summit]);
 
-    // console.log('getstate', store.getState())
-  }, [summit])
+  useEffect(() => {
+    store.dispatch(setUser(user));
+  }, [user]);
 
   return (
     <Provider store={store}>
@@ -59,11 +60,27 @@ const MyOrdersMyTicketsWidget = (props) => {
         loading={null}
         persistor={persistor}
       >
-        <h3 className='widget-title'>{t('orders.title')}</h3>
-        <MyOrdersTickets {...props} />
+        <h3 className="widget-title">{t("orders.title")}</h3>
+        <MyOrdersTickets
+          loginUrl={loginUrl}
+          supportEmail={supportEmail}
+          getUserProfile={getUserProfile}
+          summit={summit}
+          apiBaseUrl={apiBaseUrl}
+          user={user}
+        />
       </PersistGate>
     </Provider>
-  )
+  );
 }
 
-export default MyOrdersMyTicketsWidget
+MyOrdersMyTicketsWidget.propTypes = {
+  loginUrl: PropTypes.string,
+  supportEmail: PropTypes.string,
+  getUserProfile: PropTypes.func,
+  summit: PropTypes.object,
+  apiBaseUrl: PropTypes.string,
+  user: PropTypes.object,
+};
+
+export default MyOrdersMyTicketsWidget;

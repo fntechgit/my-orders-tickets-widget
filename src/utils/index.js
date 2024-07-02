@@ -1,125 +1,138 @@
-import moment from 'moment-timezone'
+import moment from "moment-timezone";
 
-export const formatCurrency = (value, { locale = 'en-US', ...options }) => {
+const THOUSAND = 1000;
+const ONE = 1;
+const FOUR = 4;
+const SIX = 6;
+
+export const PAGINATION_DISPLAY = 3;
+
+export const formatCurrency = (value, { locale = "en-US", ...options }) => {
   const defaultOptions = {
-    currency: 'USD',
+    currency: "USD",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }
+    maximumFractionDigits: 2,
+  };
 
   const formatter = new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     ...defaultOptions,
-    ...options
-  })
+    ...options,
+  });
 
-  return formatter.format(value)
-}
+  return formatter.format(value);
+};
 
 export const getDaysBetweenDates = (startDate, endDate, timeZone) => {
-  let startDay = moment(startDate * 1000).tz(timeZone)
-  let endDay = moment(endDate * 1000).tz(timeZone)
+  const startDay = moment(startDate * THOUSAND).tz(timeZone);
+  const endDay = moment(endDate * THOUSAND).tz(timeZone);
 
   // Add day one
-  let dates = [startDay.clone().unix()]
+  const dates = [startDay.clone().unix()];
 
   // Add all additional days
-  while (startDay.add(1, 'days').diff(endDay) < 0) {
-    dates.push(startDay.clone().unix())
+  while (startDay.add(ONE, "days").diff(endDay) < 0) {
+    dates.push(startDay.clone().unix());
   }
 
-  return dates
-}
+  return dates;
+};
 
 export const getFormattedDate = (datetime, timeZone) => {
-  if (timeZone)
-    return moment.tz(datetime * 1000, timeZone).format('MMMM DD, YYYY')
+  if (timeZone) return moment.tz(datetime * THOUSAND, timeZone).format("MMMM DD, YYYY");
 
-  return moment.unix(datetime).format('MMMM DD, YYYY')
-}
+  return moment.unix(datetime).format("MMMM DD, YYYY");
+};
 
 export const getFormattedTime = (datetime, timeZone = false) => {
   if (timeZone) {
-    return moment.tz(datetime * 1000, timeZone).format('HH:mm')
+    return moment.tz(datetime * THOUSAND, timeZone).format("HH:mm");
   }
 
-  return moment.unix(datetime).format('HH:mm')
-}
+  return moment.unix(datetime).format("HH:mm");
+};
 
 export const getSummitFormattedDate = (summit) => {
-  if (!summit) return null
+  if (!summit) return null;
 
-  let dateRange = getDaysBetweenDates(
+  const dateRange = getDaysBetweenDates(
     summit.start_date,
     summit.end_date,
-    summit.time_zone_id
-  )
+    summit.time_zone_id,
+  );
 
-  if (dateRange.length > 1) {
-    let startDate = getFormattedDate(dateRange[0], summit.time_zone_id)
+  if (dateRange.length > ONE) {
+    let startDate = getFormattedDate(dateRange[0], summit.time_zone_id);
     let endDate = getFormattedDate(
-      dateRange[dateRange.length - 1],
-      summit.time_zone_id
-    )
+      dateRange[dateRange.length - ONE],
+      summit.time_zone_id,
+    );
 
-    const startMonth = startDate.split(' ')[0]
-    const endMonth = endDate.split(' ')[0]
+    const startMonth = startDate.split(" ")[0];
+    const endMonth = endDate.split(" ")[0];
 
-    if (startMonth === endMonth)
-      endDate = endDate.substr(endDate.indexOf(' ') + 1)
+    if (startMonth === endMonth) endDate = endDate.substr(endDate.indexOf(" ") + ONE);
 
     const startYear = startDate.substring(
       startDate.length,
-      startDate.length - 4
-    )
-    const endYear = endDate.substring(endDate.length, endDate.length - 4)
+      startDate.length - FOUR,
+    );
+    const endYear = endDate.substring(endDate.length, endDate.length - FOUR);
 
-    if (startYear === endYear)
-      startDate = startDate.substring(0, startDate.length - 6)
+    if (startYear === endYear) startDate = startDate.substring(0, startDate.length - SIX);
 
-    endDate =
-      endDate.substring(0, endDate.length - 6) +
-      ', ' +
-      endDate.substring(endDate.length - 4)
+    endDate = `${endDate.substring(0, endDate.length - SIX)
+    }, ${
+      endDate.substring(endDate.length - FOUR)}`;
 
-    return `${startDate} - ${endDate}`
+    return `${startDate} - ${endDate}`;
   }
 
-  return getFormattedDate(summit.start_date, summit.time_zone_id)
-}
+  return getFormattedDate(summit.start_date, summit.time_zone_id);
+};
 
 export const calculateOrderTotals = ({ order, summit, tickets }) => {
-  if (!order || !summit || !tickets) return {}
+  if (!order || !summit || !tickets) return {};
 
-  const { refunded_amount, discount_amount, taxes_amount, amount } = order
-  const { ticket_types } = summit
+  const {
+    refunded_amount, discount_amount, taxes_amount, amount,
+  } = order;
+  const { ticket_types } = summit;
 
-  const ticketSummary = []
-  let purchaseTicketTotal = 0
+  const ticketSummary = [];
+  let purchaseTicketTotal = 0;
 
-  const currencyObject = { currency: order.currency }
+  const currencyObject = { currency: order.currency };
 
   Object.keys(order.tickets_excerpt_by_ticket_type).map((ticket) => {
-    let ticketType = ticket_types.find((tt) => tt.name === ticket)
+    const ticketType = ticket_types.find((tt) => tt.name === ticket);
     ticketSummary.push({
       ticket_type_id: ticketType.id,
       ticket_type: ticketType,
       name: ticket,
-      qty: order.tickets_excerpt_by_ticket_type[ticket]
-    })
-    purchaseTicketTotal =
-      purchaseTicketTotal +
-      ticketType.cost * order.tickets_excerpt_by_ticket_type[ticket]
-  })
+      qty: order.tickets_excerpt_by_ticket_type[ticket],
+    });
+    purchaseTicketTotal
+      += ticketType.cost * order.tickets_excerpt_by_ticket_type[ticket];
 
-  const purchaseTotal = formatCurrency(purchaseTicketTotal, currencyObject)
+    return ticketSummary;
+  });
 
-  const discountTotal = formatCurrency(discount_amount, currencyObject)
-  const refundTotal = formatCurrency(refunded_amount, currencyObject)
-  const taxesTotal = formatCurrency(taxes_amount, currencyObject)
-  const amountTotal = order.hasOwnProperty('amount')
+  const purchaseTotal = formatCurrency(purchaseTicketTotal, currencyObject);
+
+  const discountTotal = formatCurrency(discount_amount, currencyObject);
+  const refundTotal = formatCurrency(refunded_amount, currencyObject);
+  const taxesTotal = formatCurrency(taxes_amount, currencyObject);
+  const amountTotal = Object.prototype.hasOwnProperty.call(order, "amount")
     ? formatCurrency(amount, currencyObject)
-    : formatCurrency(purchaseTotal, currencyObject)
+    : formatCurrency(purchaseTotal, currencyObject);
 
-  return { discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary }
-}
+  return {
+    discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary,
+  };
+};
+
+export const getOrderTickets = (memberOrders, orderId) => {
+  const orders = memberOrders.filter((o) => o.id === orderId);
+  return orders[0].memberTickets;
+};

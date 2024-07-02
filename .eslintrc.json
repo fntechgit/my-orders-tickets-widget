@@ -37,5 +37,6 @@
     "import/prefer-default-export": "warn",
     "no-plusplus": "off",
     "no-continue": "off"
-  }
+  },
+  "ignorePatterns": [ "src/__mocks__" ] 
 }

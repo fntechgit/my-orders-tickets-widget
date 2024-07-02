@@ -9,32 +9,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ * */
 
-import React from 'react'
-import MyOrdersMyTicketsWidget from './my-orders-tickets-widget'
-import { createRoot } from 'react-dom/client'
-import { storeAuthInfo } from 'openstack-uicore-foundation/lib/security/methods'
-import './i18n'
-import './styles/general.scss'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { storeAuthInfo } from "openstack-uicore-foundation/lib/security/methods";
+import MyOrdersMyTicketsWidget from "./my-orders-tickets-widget";
+import "./i18n";
 
 /** TODO: DELETE AND USE REAL DATA PULLED FROM API */
-import { user, summit } from './__mocks__/mockData'
+import { user, summit } from "./__mocks__/mockData";
 
-storeAuthInfo(process.env.ACCESS_TOKEN, 0)
+storeAuthInfo(process.env.ACCESS_TOKEN);
 
 const widgetProps = {
   user,
   summit,
-  getAccessToken: () => process.env.ACCESS_TOKEN,
-  apiBaseUrl: process.env.API_BASE_URL
-}
+  apiBaseUrl: process.env.API_BASE_URL,
+};
 
-const container = document.getElementById('root')
-const root = createRoot(container)
+const container = document.getElementById("root");
+const root = createRoot(container);
 
 root.render(
-  <div className='container orders-ticket-widget-container'>
-    <MyOrdersMyTicketsWidget {...widgetProps} />
-  </div>
-)
+  <div className="container orders-ticket-widget-container">
+    <MyOrdersMyTicketsWidget
+      user={widgetProps.user}
+      summit={widgetProps.summit}
+      apiBaseUrl={widgetProps.apiBaseUrl}
+    />
+  </div>,
+);
