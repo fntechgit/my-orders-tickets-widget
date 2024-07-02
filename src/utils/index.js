@@ -81,9 +81,10 @@ export const getSummitFormattedDate = (summit) => {
 
     if (startYear === endYear) startDate = startDate.substring(0, startDate.length - SIX);
 
-    endDate = `${endDate.substring(0, endDate.length - SIX)
-    }, ${
-      endDate.substring(endDate.length - FOUR)}`;
+    endDate = `${endDate.substring(
+      0,
+      endDate.length - SIX,
+    )}, ${endDate.substring(endDate.length - FOUR)}`;
 
     return `${startDate} - ${endDate}`;
   }
@@ -128,7 +129,11 @@ export const calculateOrderTotals = ({ order, summit, tickets }) => {
     : formatCurrency(purchaseTotal, currencyObject);
 
   return {
-    discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary,
+    discountTotal,
+    refundTotal,
+    taxesTotal,
+    amountTotal,
+    ticketSummary,
   };
 };
 

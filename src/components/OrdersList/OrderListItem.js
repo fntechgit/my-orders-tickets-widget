@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { Button } from "@mui/material";
 import OrderListTickets from "./OrderListTickets";
-import ButtonStyled from "../ButtonStyled";
 import { PAGINATION_DISPLAY } from "../../utils";
+import * as styles from "./styles.module.scss";
 
 function OrderListItem({
-  order,
-  tickets,
-  total,
-  onPaginateClick,
+  order, tickets, total, onPaginateClick,
 }) {
   const { t } = useTranslation();
   const [itemsToDisplay, setItemsToDisplay] = useState(PAGINATION_DISPLAY);
@@ -27,24 +25,13 @@ function OrderListItem({
       {slicedTickets?.map((ticket) => (
         <OrderListTickets key={ticket.id} order={order} ticket={ticket} />
       ))}
-      {total > itemsToDisplay
-        ? (
-          <ButtonStyled
-            styles={{
-              display: "block",
-              padding: "5px 10px",
-              color: "#000000",
-              fontSize: "1.3em",
-              textDecoration: "underline",
-              margin: "0 auto",
-              textTransform: "none",
-              cursor: "pointer",
-            }}
-            onClick={onPaginate}
-          >
-            {t("orders-tickets.view_more")}
-          </ButtonStyled>
-        ) : ""}
+      {total > itemsToDisplay ? (
+        <Button className={styles.viewMoreButton} onClick={onPaginate}>
+          {t("orders-tickets.view_more")}
+        </Button>
+      ) : (
+        ""
+      )}
     </>
   );
 }

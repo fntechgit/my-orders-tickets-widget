@@ -21,12 +21,7 @@ import { RESET_STATE, setSummit, setUser } from "./actions";
 
 function MyOrdersMyTicketsWidget(props) {
   const {
-    loginUrl,
-    supportEmail,
-    getUserProfile,
-    summit,
-    apiBaseUrl,
-    user,
+    loginUrl, supportEmail, getUserProfile, summit, apiBaseUrl, user,
   } = props;
   const { t } = useTranslation();
 

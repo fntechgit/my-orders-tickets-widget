@@ -3,40 +3,44 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { Grid } from "@mui/material";
 import OrderListItem from "./OrderListItem";
-import OrderSummary from "../OrderSummary/OrdersSummary";
+import OrderSummary from "../OrderSummary";
 import { ONE, getTicketsByOrder } from "../../actions";
 import { getOrderTickets } from "../../utils";
-import "./styles.scss";
+import * as styles from "./styles.module.scss";
 
 function OrdersList(props) {
-  const {
-    summit,
-    order,
-  } = props;
+  const { summit, order } = props;
   const dispatch = useDispatch();
   const {
-    total,
-    current_page,
-    per_page,
-    memberOrders,
-  } = useSelector((state) => state.widgetState || {}, shallowEqual);
+    total, current_page, per_page, memberOrders,
+  } = useSelector(
+    (state) => state.widgetState || {},
+    shallowEqual,
+  );
   const fetchTicketsByOrder = async () => {
-    await dispatch(getTicketsByOrder({ orderId: order.id, page: current_page, perPage: per_page }))
-      .catch((e) => {
-        console.log(e);
-      });
+    await dispatch(
+      getTicketsByOrder({
+        orderId: order.id,
+        page: current_page,
+        perPage: per_page,
+      }),
+    ).catch((e) => {
+      console.log(e);
+    });
   };
 
   useEffect(() => {
     fetchTicketsByOrder();
   }, []);
 
-  const onPaginateClick = () => dispatch(getTicketsByOrder({
-    orderId: order.id,
-    page: current_page + ONE,
-    perPage: per_page,
-    next: true,
-  }));
+  const onPaginateClick = () => dispatch(
+    getTicketsByOrder({
+      orderId: order.id,
+      page: current_page + ONE,
+      perPage: per_page,
+      next: true,
+    }),
+  );
 
   return (
     <Grid
@@ -44,7 +48,7 @@ function OrdersList(props) {
       container
       rowSpacing={1}
       columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-      className="order-ticket-container"
+      className={styles.orderTicketContainer}
     >
       <Grid
         padding={2}
@@ -54,7 +58,7 @@ function OrdersList(props) {
         sm={12}
         xs={12}
         order={{ md: 1, lg: 1 }}
-        className="ticket-list-container"
+        className={styles.ticketListContainer}
       >
         <OrderListItem
           order={order}
