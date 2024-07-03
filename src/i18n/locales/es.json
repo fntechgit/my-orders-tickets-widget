@@ -199,6 +199,7 @@
     "reassign_ticket": "Reassign",
     "assign_ticket": "Assign Ticket",
     "status_unassigned": "Unassigned",
+    "status_complete": "Completed",
     "status_incomplete": "Incomplete",
     "status_refund_requested": "Refund Requested"
   },

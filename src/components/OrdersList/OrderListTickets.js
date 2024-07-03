@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Box, Grid, Button } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import * as styles from "./styles.module.scss";
 import TicketStatus from "../TicketStatus";
+import OrderNumber from "./OrderNumber";
 
 function OrderListTickets({ ticket }) {
   const { t } = useTranslation();
@@ -23,14 +23,9 @@ function OrderListTickets({ ticket }) {
               {t("ticket_status.assigned_to")}:
             </Box>
             <Box className={styles.ticketOwnerEmail}>{ticket.owner?.email}</Box>
-            <Box className={styles.ticketNoContainer}>
-              <span>Ticket #:</span>
-              <span className={styles.ticketTicketNumber}>{ticket.number}</span>
-              <ContentCopyIcon
-                className={styles.copyIcon}
-                onClick={() => navigator.clipboard.writeText(ticket.number)}
-              />
-            </Box>
+            <span className={styles.ticketNo}>
+              Ticket #: <OrderNumber number={ticket.number} copy />
+            </span>
           </>
         ) : (
           <span className={styles.ticketOwnerEmail}>
@@ -50,15 +45,12 @@ function OrderListTickets({ ticket }) {
           <TicketStatus ticket={ticket} />
         </Grid>
         <Grid padding={2} xs={7} container item>
-          <Grid item xs={4}>
-            {/* TO CHANGE */}
-            {ticket.total_refunded_amount ? (
-              <div className="">Refund Requested</div>
-            ) : (
-              ""
-            )}
-          </Grid>
-          <Grid item xs={8} align="right">
+          <Grid
+            item
+            container
+            align="right"
+            className={styles.ticketActionButtons}
+          >
             {ticket.owner ? (
               <>
                 <Button className={styles.viewTicketButton}>

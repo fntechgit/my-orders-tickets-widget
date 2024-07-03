@@ -12,6 +12,7 @@ function TicketStatus({ ticket }) {
   const ticket_status_incomplete =
     ticket.owner?.status === "Incomplete" && ticket.owner;
   const ticket_owner = ticket.owner;
+  const ticket_complete = ticket.owner?.status === "Complete";
 
   return (
     <Container className={styles.ticketStatusContainer}>
@@ -28,6 +29,11 @@ function TicketStatus({ ticket }) {
       {!ticket_owner && (
         <Button className={styles.buttonUnassigned}>
           {t("ticket_status.status_unassigned")}
+        </Button>
+      )}
+      {ticket_complete && (
+        <Button className={styles.buttonComplete}>
+          {t("ticket_status.status_complete")}
         </Button>
       )}
     </Container>

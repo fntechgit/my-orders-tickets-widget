@@ -34,7 +34,7 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <div className="container orders-ticket-widget-container">
+  <div className="container">
     <MyOrdersMyTicketsWidget
       user={widgetProps.user}
       summit={widgetProps.summit}

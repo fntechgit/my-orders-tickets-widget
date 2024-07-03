@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import OrdersList from "./OrdersList";
 import { getSummitFormattedDate } from "../utils";
 import { getUserOrders } from "../actions";
+import * as styles from "./styles.module.scss";
 
 function MyOrdersTickets() {
   const dispatch = useDispatch();
@@ -26,9 +27,11 @@ function MyOrdersTickets() {
   }, []);
   return (
     <>
-      <Box className="widget-header">
-        <h2 className="summit-title">{name}</h2>
-        <h3 className="summit-date">{getSummitFormattedDate(summit)}</h3>
+      <Box className={styles.widgetHeader}>
+        <h2 className={styles.summitTitleDate}>{name}</h2>
+        <h2 className={styles.summitTitleDate}>
+          {getSummitFormattedDate(summit)}
+        </h2>
       </Box>
       {memberOrders?.map((order) => (
         <OrdersList key={order.id} order={order} summit={summit} />

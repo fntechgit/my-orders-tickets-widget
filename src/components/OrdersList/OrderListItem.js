@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
 import OrderListTickets from "./OrderListTickets";
-import { PAGINATION_DISPLAY } from "../../utils";
+import { PAGINATION_DISPLAY, getFormattedDate } from "../../utils";
+import OrderNumber from "./OrderNumber";
 import * as styles from "./styles.module.scss";
 
 function OrderListItem({ order, tickets, total, onPaginateClick }) {
   const { t } = useTranslation();
   const [itemsToDisplay, setItemsToDisplay] = useState(PAGINATION_DISPLAY);
   const slicedTickets = tickets?.slice(0, itemsToDisplay);
+  const detailsRequired = tickets?.find(
+    (ticket) => ticket.owner?.status === "Incomplete"
+  );
 
   const onPaginate = () => {
     if (total > tickets.length) {
@@ -20,6 +25,20 @@ function OrderListItem({ order, tickets, total, onPaginateClick }) {
 
   return (
     <>
+      <Box>
+        <span className={styles.orderTicketInfo}>
+          {t("orders.purchased")}: {getFormattedDate(order.created)} |{" "}
+          {t("order_summary.order_no")}:{" "}
+          <OrderNumber number={order.number} copy />
+        </span>
+        {detailsRequired && (
+          <span className={styles.detailsRequiredLabel}>
+            <ErrorIcon sx={{ color: "#FF9800" }} /> Some tickets in this order
+            require additional details before the ticket(s) can be issued.
+          </span>
+        )}
+      </Box>
+
       {slicedTickets?.map((ticket) => (
         <OrderListTickets key={ticket.id} order={order} ticket={ticket} />
       ))}
