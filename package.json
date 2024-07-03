@@ -82,7 +82,9 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.1.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "eslint-config-prettier": "^9.1.0",
+    "@babel/eslint-parser": "^7.24.7"
   },
   "peerDependencies": {
     "openstack-uicore-foundation": "^4.1.82",
