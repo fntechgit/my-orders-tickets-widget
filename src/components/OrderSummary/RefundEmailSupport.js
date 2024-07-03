@@ -7,7 +7,7 @@ import * as styles from "./styles.module.scss";
 function RefundEmailSupport({
   onRefundClick,
   onRefundDetailClick,
-  onEmailSupportClick,
+  onEmailSupportClick
 }) {
   const { t } = useTranslation();
   return (
@@ -43,7 +43,7 @@ function RefundEmailSupport({
 RefundEmailSupport.propTypes = {
   onRefundClick: PropTypes.func,
   onRefundDetailClick: PropTypes.func,
-  onEmailSupportClick: PropTypes.func,
+  onEmailSupportClick: PropTypes.func
 };
 
 export default RefundEmailSupport;

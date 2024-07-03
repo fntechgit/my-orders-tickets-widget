@@ -5,17 +5,18 @@ const Dotenv = require("dotenv-webpack");
 module.exports = {
   plugins: [
     new Dotenv({
-      expand: true,
+      expand: true
     }),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
-      process: "process/browser.js",
-    }),
+      process: "process/browser.js"
+    })
   ],
   resolve: {
     fallback: {
       process: require.resolve("process"),
-    },
+      buffer: false
+    }
   },
   module: {
     rules: [
@@ -23,12 +24,12 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-        },
+          loader: "babel-loader"
+        }
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.module\.scss/,
@@ -40,39 +41,39 @@ module.exports = {
               sourceMap: false,
               modules: {
                 localIdentName: "[local]___[hash:base64:5]",
-                localIdentHashSalt: "speakers-widget",
-              },
-            },
+                localIdentHashSalt: "speakers-widget"
+              }
+            }
           },
           {
             loader: "sass-loader",
             options: {
-              sourceMap: false,
-            },
-          },
-        ],
+              sourceMap: false
+            }
+          }
+        ]
       },
       {
         test: /\.scss/,
         exclude: /\.module\.scss/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
       },
       {
         test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: "file-loader?name=fonts/[name].[ext]",
+        use: "file-loader?name=fonts/[name].[ext]"
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: "url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]",
+        use: "url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]"
       },
       {
         test: /\.svg/,
-        use: "file-loader?name=svg/[name].[ext]!svgo-loader",
+        use: "file-loader?name=svg/[name].[ext]!svgo-loader"
       },
       {
         test: /\.jpg|\.png|\.gif$/,
-        use: "file-loader?name=images/[name].[ext]",
-      },
-    ],
-  },
+        use: "file-loader?name=images/[name].[ext]"
+      }
+    ]
+  }
 };

@@ -8,9 +8,8 @@ import * as styles from "./styles.module.scss";
 
 function OrderSummaryTable({ order, summit, tickets }) {
   const { t } = useTranslation();
-  const {
-    discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary,
-  } = calculateOrderTotals({ order, summit, tickets });
+  const { discountTotal, refundTotal, taxesTotal, amountTotal, ticketSummary } =
+    calculateOrderTotals({ order, summit, tickets });
   const hundred = 100;
 
   return (
@@ -18,7 +17,8 @@ function OrderSummaryTable({ order, summit, tickets }) {
       {ticketSummary?.length > 0 && (
         <>
           {ticketSummary.map((ticket) => {
-            const ticketTotal = (ticket.qty * (ticket.ticket_type.cost * hundred)) / hundred;
+            const ticketTotal =
+              (ticket.qty * (ticket.ticket_type.cost * hundred)) / hundred;
 
             return (
               <Grid
@@ -28,10 +28,7 @@ function OrderSummaryTable({ order, summit, tickets }) {
               >
                 <Grid xs={8} item>
                   <span>
-                    x
-                    {ticket.qty}
-                    {" "}
-                    {ticket.ticket_type.name}
+                    x{ticket.qty} {ticket.ticket_type.name}
                   </span>
                 </Grid>
                 <Grid xs={4} item align="right">
@@ -48,8 +45,7 @@ function OrderSummaryTable({ order, summit, tickets }) {
             {t("order_summary.discounts")}
           </Grid>
           <Grid xs={4} item align="right">
-            -
-            {discountTotal}
+            -{discountTotal}
           </Grid>
         </Grid>
       )}
@@ -69,8 +65,7 @@ function OrderSummaryTable({ order, summit, tickets }) {
             {t("order_summary.amount_paid")}
           </Grid>
           <Grid xs={4} item align="right">
-            -
-            {amountTotal}
+            -{amountTotal}
           </Grid>
         </Grid>
       )}
@@ -102,10 +97,10 @@ OrderSummaryTable.propTypes = {
     currency: PropTypes.string,
     discount_amount: PropTypes.number,
     taxes_amount: PropTypes.number,
-    status: PropTypes.string,
+    status: PropTypes.string
   }),
   summit: PropTypes.object,
-  tickets: PropTypes.arrayOf(Object),
+  tickets: PropTypes.arrayOf(Object)
 };
 
 export default OrderSummaryTable;

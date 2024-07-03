@@ -12,13 +12,13 @@ function MyOrdersTickets() {
     summit: { name },
     memberOrders,
     current_page,
-    per_page,
+    per_page
   } = useSelector((state) => state.widgetState || {}, shallowEqual);
   const fetchData = async () => {
     dispatch(getUserOrders({ page: current_page, perPage: per_page })).catch(
       (e) => {
         console.log(e);
-      },
+      }
     );
   };
   useEffect(() => {

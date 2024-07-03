@@ -41,7 +41,7 @@ function OrderSummary({ order, summit, tickets }) {
 OrderSummary.propTypes = {
   order: PropTypes.object,
   summit: PropTypes.object,
-  tickets: PropTypes.arrayOf(Object),
+  tickets: PropTypes.arrayOf(Object)
 };
 
 export default OrderSummary;

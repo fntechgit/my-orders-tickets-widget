@@ -6,7 +6,7 @@ import {
   createAction,
   stopLoading,
   startLoading,
-  putRequest,
+  putRequest
 } from "openstack-uicore-foundation/lib/utils/actions";
 import history from "./history";
 
@@ -34,7 +34,7 @@ export const TICKET_ATTENDEE_KEYS = {
   lastName: "attendee_last_name",
   company: "attendee_company",
   disclaimerAccepted: "disclaimer_accepted",
-  extraQuestions: "extra_questions",
+  extraQuestions: "extra_questions"
 };
 
 // USER CONTS
@@ -58,66 +58,76 @@ export const ONE = 1;
 export const FIVE = 5;
 
 // ORDERS ACTIONS
-export const getUserOrders = ({ page = ONE, perPage = FIVE }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
-  const {
-    widgetState: { summit },
-  } = getState();
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
-  if (!accessToken) return Promise.reject();
-  dispatch(startLoading());
-  const params = {
-    access_token: accessToken,
-    order: "-id",
-    filter: "status==Paid",
-    relations: "none",
-    page,
-    per_page: perPage,
+export const getUserOrders =
+  ({ page = ONE, perPage = FIVE }) =>
+  async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
+    const {
+      widgetState: { summit }
+    } = getState();
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
+    if (!accessToken) return Promise.reject();
+    dispatch(startLoading());
+    const params = {
+      access_token: accessToken,
+      order: "-id",
+      filter: "status==Paid",
+      relations: "none",
+      page,
+      per_page: perPage
+    };
+    return getRequest(
+      null,
+      createAction(GET_USER_ORDERS),
+      `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/me`,
+      authErrorHandler
+    )(params)(dispatch)
+      .then((payload) => {
+        dispatch(stopLoading());
+        return payload;
+      })
+      .catch((e) => {
+        dispatch(stopLoading());
+        return e;
+      });
   };
-  return getRequest(
-    null,
-    createAction(GET_USER_ORDERS),
-    `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/me`,
-    authErrorHandler,
-  )(params)(dispatch)
-    .then((payload) => {
-      dispatch(stopLoading());
-      return payload;
-    })
-    .catch((e) => {
-      dispatch(stopLoading());
-      return e;
-    });
-};
 
-export const setActiveOrderId = (orderId) => async (dispatch) => dispatch(createAction(SET_ACTIVE_ORDER_ID)(orderId));
+export const setActiveOrderId = (orderId) => async (dispatch) =>
+  dispatch(createAction(SET_ACTIVE_ORDER_ID)(orderId));
 
 // USER ACTIONS
-export const setUser = (user) => (dispatch) => dispatch(createAction(SET_USER)(user));
+export const setUser = (user) => (dispatch) =>
+  dispatch(createAction(SET_USER)(user));
 
-export const updateProfile = (profile) => async (dispatch, { idpBaseUrl, loginUrl }) => {
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
+export const updateProfile =
+  (profile) =>
+  async (dispatch, { idpBaseUrl, loginUrl }) => {
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
 
-  if (!accessToken) return null;
+    if (!accessToken) return null;
 
-  dispatch(startLoading());
+    dispatch(startLoading());
 
-  const params = {
-    access_token: accessToken,
+    const params = {
+      access_token: accessToken
+    };
+
+    dispatch(createAction(START_LOADING_IDP_PROFILE)());
+
+    return putRequest(
+      null,
+      createAction(UPDATE_IDP_PROFILE),
+      // TODO: need IDP_BASE_URL
+      `${idpBaseUrl}/api/v1/users/me`,
+      profile,
+      authErrorHandler
+    )(params)(dispatch)
+      .then((payload) => payload)
+      .catch(() => dispatch(createAction(STOP_LOADING_IDP_PROFILE)()));
   };
-
-  dispatch(createAction(START_LOADING_IDP_PROFILE)());
-
-  return putRequest(
-    null,
-    createAction(UPDATE_IDP_PROFILE),
-    // TODO: need IDP_BASE_URL
-    `${idpBaseUrl}/api/v1/users/me`,
-    profile,
-    authErrorHandler,
-  )(params)(dispatch)
-    .then((payload) => payload)
-    .catch(() => dispatch(createAction(STOP_LOADING_IDP_PROFILE)()));
-};
 
 // TICKET ACTIONS
 
@@ -134,146 +144,161 @@ export const updateProfile = (profile) => async (dispatch, { idpBaseUrl, loginUr
 //   return normalizedEntity;
 // };
 
-export const getUserTickets = ({ page = ONE, perPage = FIVE }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
-  const {
-    userState: { userProfile },
-    summit,
-  } = getState();
-  if (!summit) return Promise.reject();
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
-  if (!accessToken) return Promise.reject();
-  if (!userProfile.id) return Promise.reject();
-  dispatch(startLoading());
-  const params = {
-    access_token: accessToken,
-    filter: "status==Paid",
-    expand: "order, owner, ticket_type",
-    order: "-id",
-    fields:
+export const getUserTickets =
+  ({ page = ONE, perPage = FIVE }) =>
+  async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
+    const {
+      userState: { userProfile },
+      summit
+    } = getState();
+    if (!summit) return Promise.reject();
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
+    if (!accessToken) return Promise.reject();
+    if (!userProfile.id) return Promise.reject();
+    dispatch(startLoading());
+    const params = {
+      access_token: accessToken,
+      filter: "status==Paid",
+      expand: "order, owner, ticket_type",
+      order: "-id",
+      fields:
         "order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.status",
-    relations: "none",
-    page,
-    per_page: perPage,
+      relations: "none",
+      page,
+      per_page: perPage
+    };
+    return getRequest(
+      null,
+      createAction(GET_TICKETS),
+      `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/all/tickets/me`,
+      authErrorHandler
+    )(params)(dispatch)
+      .then(() => {
+        dispatch(stopLoading());
+      })
+      .catch((e) => {
+        dispatch(stopLoading());
+        return e;
+      });
   };
-  return getRequest(
-    null,
-    createAction(GET_TICKETS),
-    `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/all/tickets/me`,
-    authErrorHandler,
-  )(params)(dispatch)
-    .then(() => {
-      dispatch(stopLoading());
-    })
-    .catch((e) => {
-      dispatch(stopLoading());
-      return e;
-    });
-};
 
-export const getTicketsByOrder = ({
-  orderId, page = ONE, perPage = FIVE, next = false,
-}) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
-  dispatch(startLoading());
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
-  if (!accessToken) return null;
-  const params = {
-    access_token: accessToken,
-    expand:
+export const getTicketsByOrder =
+  ({ orderId, page = ONE, perPage = FIVE, next = false }) =>
+  async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
+    dispatch(startLoading());
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
+    if (!accessToken) return null;
+    const params = {
+      access_token: accessToken,
+      expand:
         "refund_requests,owner,owner.extra_questions,badge,badge.features,ticket_type",
-    order: "+id",
-    page,
-    per_page: perPage,
-  };
-  return getRequest(
-    null,
-    next
-      ? createAction(GET_NEXT_TICKETS_BY_ORDER)
-      : createAction(GET_TICKETS_BY_ORDER),
-    `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,
-    authErrorHandler,
-  )(params)(dispatch)
-    .then((payload) => {
-      dispatch(stopLoading());
-      return payload;
-    })
-    .catch((e) => {
-      dispatch(stopLoading());
-      dispatch(createAction(GET_TICKETS_BY_ORDER_ERROR));
-      return e;
-    });
-};
-
-export const resendNotification = (ticket) => async (dispatch, { apiBaseUrl, loginUrl }) => {
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
-
-  if (!accessToken) return null;
-
-  const { message } = ticket;
-
-  dispatch(startLoading());
-
-  const orderId = ticket.order ? ticket.order.id : ticket.order_id;
-
-  const params = {
-    access_token: accessToken,
+      order: "+id",
+      page,
+      per_page: perPage
+    };
+    return getRequest(
+      null,
+      next
+        ? createAction(GET_NEXT_TICKETS_BY_ORDER)
+        : createAction(GET_TICKETS_BY_ORDER),
+      `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,
+      authErrorHandler
+    )(params)(dispatch)
+      .then((payload) => {
+        dispatch(stopLoading());
+        return payload;
+      })
+      .catch((e) => {
+        dispatch(stopLoading());
+        dispatch(createAction(GET_TICKETS_BY_ORDER_ERROR));
+        return e;
+      });
   };
 
-  return putRequest(
-    null,
-    createAction(RESEND_NOTIFICATION),
-    `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/attendee/reinvite`,
-    { message },
-    authErrorHandler,
-  )(params)(dispatch)
-    .then(() => {
-      dispatch(stopLoading());
-    })
-    .catch((e) => {
-      dispatch(stopLoading());
-      return e;
-    });
-};
+export const resendNotification =
+  (ticket) =>
+  async (dispatch, { apiBaseUrl, loginUrl }) => {
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
 
-export const refundTicket = ({ ticket }) => async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
-  const accessToken = await getAccessToken().catch(() => history.replace(loginUrl));
+    if (!accessToken) return null;
 
-  if (!accessToken) return null;
+    const { message } = ticket;
 
-  dispatch(startLoading());
+    dispatch(startLoading());
 
-  const {
-    orderState: { current_page: orderPage },
-    ticketState: { current_page: ticketPage },
-  } = getState();
+    const orderId = ticket.order ? ticket.order.id : ticket.order_id;
 
-  const orderId = ticket.order ? ticket.order.id : ticket.order_id;
+    const params = {
+      access_token: accessToken
+    };
 
-  const params = {
-    access_token: accessToken,
+    return putRequest(
+      null,
+      createAction(RESEND_NOTIFICATION),
+      `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/attendee/reinvite`,
+      { message },
+      authErrorHandler
+    )(params)(dispatch)
+      .then(() => {
+        dispatch(stopLoading());
+      })
+      .catch((e) => {
+        dispatch(stopLoading());
+        return e;
+      });
   };
 
-  return deleteRequest(
-    null,
-    createAction(REFUND_TICKET),
-    `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/refund`,
-    {},
-    authErrorHandler,
-  )(params)(dispatch)
-    .then((payload) => {
-      dispatch(stopLoading());
+export const refundTicket =
+  ({ ticket }) =>
+  async (dispatch, getState, { apiBaseUrl, loginUrl }) => {
+    const accessToken = await getAccessToken().catch(() =>
+      history.replace(loginUrl)
+    );
 
-      if (ticket.order_id) {
-        dispatch(getUserOrders({ page: orderPage }));
-      } else {
-        dispatch(getUserTickets({ page: ticketPage }));
-      }
-      return payload;
-    })
-    .catch((e) => {
-      dispatch(stopLoading());
-      throw e;
-    });
-};
+    if (!accessToken) return null;
+
+    dispatch(startLoading());
+
+    const {
+      orderState: { current_page: orderPage },
+      ticketState: { current_page: ticketPage }
+    } = getState();
+
+    const orderId = ticket.order ? ticket.order.id : ticket.order_id;
+
+    const params = {
+      access_token: accessToken
+    };
+
+    return deleteRequest(
+      null,
+      createAction(REFUND_TICKET),
+      `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/refund`,
+      {},
+      authErrorHandler
+    )(params)(dispatch)
+      .then((payload) => {
+        dispatch(stopLoading());
+
+        if (ticket.order_id) {
+          dispatch(getUserOrders({ page: orderPage }));
+        } else {
+          dispatch(getUserTickets({ page: ticketPage }));
+        }
+        return payload;
+      })
+      .catch((e) => {
+        dispatch(stopLoading());
+        throw e;
+      });
+  };
 
 // SUMMIT ACTIONS
-export const setSummit = (summit) => async (dispatch) => dispatch(createAction(SET_SUMMIT)(summit));
+export const setSummit = (summit) => async (dispatch) =>
+  dispatch(createAction(SET_SUMMIT)(summit));

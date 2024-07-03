@@ -6,9 +6,7 @@ import OrderListTickets from "./OrderListTickets";
 import { PAGINATION_DISPLAY } from "../../utils";
 import * as styles from "./styles.module.scss";
 
-function OrderListItem({
-  order, tickets, total, onPaginateClick,
-}) {
+function OrderListItem({ order, tickets, total, onPaginateClick }) {
   const { t } = useTranslation();
   const [itemsToDisplay, setItemsToDisplay] = useState(PAGINATION_DISPLAY);
   const slicedTickets = tickets?.slice(0, itemsToDisplay);
@@ -25,7 +23,7 @@ function OrderListItem({
       {slicedTickets?.map((ticket) => (
         <OrderListTickets key={ticket.id} order={order} ticket={ticket} />
       ))}
-      {total > itemsToDisplay ? (
+      {tickets?.length > itemsToDisplay ? (
         <Button className={styles.viewMoreButton} onClick={onPaginate}>
           {t("orders-tickets.view_more")}
         </Button>
@@ -38,7 +36,7 @@ function OrderListItem({
 
 OrderListItem.propTypes = {
   order: PropTypes.object,
-  tickets: PropTypes.arrayOf(Object),
+  tickets: PropTypes.arrayOf(Object)
 };
 
 export default OrderListItem;

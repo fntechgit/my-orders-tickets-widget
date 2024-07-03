@@ -20,8 +20,7 @@ function OrderListTickets({ ticket }) {
         {ticket.owner?.email ? (
           <>
             <Box className={styles.label}>
-              {t("ticket_status.assigned_to")}
-              :
+              {t("ticket_status.assigned_to")}:
             </Box>
             <Box className={styles.ticketOwnerEmail}>{ticket.owner?.email}</Box>
             <Box className={styles.ticketNoContainer}>
@@ -85,14 +84,14 @@ OrderListTickets.propTypes = {
   ticket: PropTypes.shape({
     id: PropTypes.number,
     owner: PropTypes.shape({
-      email: PropTypes.string,
+      email: PropTypes.string
     }),
     number: PropTypes.string,
     total_refunded_amount: PropTypes.number,
     ticket_type: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }),
+      name: PropTypes.string
+    })
+  })
 };
 
 export default OrderListTickets;

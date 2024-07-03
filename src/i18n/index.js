@@ -26,11 +26,11 @@ i18n
     debug: true,
     resources: {
       en: { translation: en },
-      es: { translation: es },
+      es: { translation: es }
     },
     interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
+      escapeValue: false // not needed for react as it escapes by default
+    }
   });
 
 export default i18n;

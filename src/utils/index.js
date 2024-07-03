@@ -11,13 +11,13 @@ export const formatCurrency = (value, { locale = "en-US", ...options }) => {
   const defaultOptions = {
     currency: "USD",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   };
 
   const formatter = new Intl.NumberFormat(locale, {
     style: "currency",
     ...defaultOptions,
-    ...options,
+    ...options
   });
 
   return formatter.format(value);
@@ -39,7 +39,8 @@ export const getDaysBetweenDates = (startDate, endDate, timeZone) => {
 };
 
 export const getFormattedDate = (datetime, timeZone) => {
-  if (timeZone) return moment.tz(datetime * THOUSAND, timeZone).format("MMMM DD, YYYY");
+  if (timeZone)
+    return moment.tz(datetime * THOUSAND, timeZone).format("MMMM DD, YYYY");
 
   return moment.unix(datetime).format("MMMM DD, YYYY");
 };
@@ -58,32 +59,34 @@ export const getSummitFormattedDate = (summit) => {
   const dateRange = getDaysBetweenDates(
     summit.start_date,
     summit.end_date,
-    summit.time_zone_id,
+    summit.time_zone_id
   );
 
   if (dateRange.length > ONE) {
     let startDate = getFormattedDate(dateRange[0], summit.time_zone_id);
     let endDate = getFormattedDate(
       dateRange[dateRange.length - ONE],
-      summit.time_zone_id,
+      summit.time_zone_id
     );
 
     const startMonth = startDate.split(" ")[0];
     const endMonth = endDate.split(" ")[0];
 
-    if (startMonth === endMonth) endDate = endDate.substr(endDate.indexOf(" ") + ONE);
+    if (startMonth === endMonth)
+      endDate = endDate.substr(endDate.indexOf(" ") + ONE);
 
     const startYear = startDate.substring(
       startDate.length,
-      startDate.length - FOUR,
+      startDate.length - FOUR
     );
     const endYear = endDate.substring(endDate.length, endDate.length - FOUR);
 
-    if (startYear === endYear) startDate = startDate.substring(0, startDate.length - SIX);
+    if (startYear === endYear)
+      startDate = startDate.substring(0, startDate.length - SIX);
 
     endDate = `${endDate.substring(
       0,
-      endDate.length - SIX,
+      endDate.length - SIX
     )}, ${endDate.substring(endDate.length - FOUR)}`;
 
     return `${startDate} - ${endDate}`;
@@ -95,9 +98,7 @@ export const getSummitFormattedDate = (summit) => {
 export const calculateOrderTotals = ({ order, summit, tickets }) => {
   if (!order || !summit || !tickets) return {};
 
-  const {
-    refunded_amount, discount_amount, taxes_amount, amount,
-  } = order;
+  const { refunded_amount, discount_amount, taxes_amount, amount } = order;
   const { ticket_types } = summit;
 
   const ticketSummary = [];
@@ -111,10 +112,10 @@ export const calculateOrderTotals = ({ order, summit, tickets }) => {
       ticket_type_id: ticketType.id,
       ticket_type: ticketType,
       name: ticket,
-      qty: order.tickets_excerpt_by_ticket_type[ticket],
+      qty: order.tickets_excerpt_by_ticket_type[ticket]
     });
-    purchaseTicketTotal
-      += ticketType.cost * order.tickets_excerpt_by_ticket_type[ticket];
+    purchaseTicketTotal +=
+      ticketType.cost * order.tickets_excerpt_by_ticket_type[ticket];
 
     return ticketSummary;
   });
@@ -133,7 +134,7 @@ export const calculateOrderTotals = ({ order, summit, tickets }) => {
     refundTotal,
     taxesTotal,
     amountTotal,
-    ticketSummary,
+    ticketSummary
   };
 };
 

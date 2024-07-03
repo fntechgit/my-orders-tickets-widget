@@ -11,19 +11,17 @@ import * as styles from "./styles.module.scss";
 function OrdersList(props) {
   const { summit, order } = props;
   const dispatch = useDispatch();
-  const {
-    total, current_page, per_page, memberOrders,
-  } = useSelector(
+  const { total, current_page, per_page, memberOrders } = useSelector(
     (state) => state.widgetState || {},
-    shallowEqual,
+    shallowEqual
   );
   const fetchTicketsByOrder = async () => {
     await dispatch(
       getTicketsByOrder({
         orderId: order.id,
         page: current_page,
-        perPage: per_page,
-      }),
+        perPage: per_page
+      })
     ).catch((e) => {
       console.log(e);
     });
@@ -33,14 +31,15 @@ function OrdersList(props) {
     fetchTicketsByOrder();
   }, []);
 
-  const onPaginateClick = () => dispatch(
-    getTicketsByOrder({
-      orderId: order.id,
-      page: current_page + ONE,
-      perPage: per_page,
-      next: true,
-    }),
-  );
+  const onPaginateClick = () =>
+    dispatch(
+      getTicketsByOrder({
+        orderId: order.id,
+        page: current_page + ONE,
+        perPage: per_page,
+        next: true
+      })
+    );
 
   return (
     <Grid
@@ -88,7 +87,7 @@ function OrdersList(props) {
 
 OrdersList.propTypes = {
   summit: PropTypes.object,
-  order: PropTypes.object,
+  order: PropTypes.object
 };
 
 export default OrdersList;

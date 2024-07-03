@@ -7,9 +7,10 @@ import * as styles from "./styles.module.scss";
 function TicketStatus({ ticket }) {
   const { t } = useTranslation();
   const refund_requests = ticket.refund_requests.find(
-    (r) => r.status === "Requested",
+    (r) => r.status === "Requested"
   );
-  const ticket_status_incomplete = ticket.owner?.status === "Incomplete" && ticket.owner;
+  const ticket_status_incomplete =
+    ticket.owner?.status === "Incomplete" && ticket.owner;
   const ticket_owner = ticket.owner;
 
   return (
@@ -36,10 +37,10 @@ function TicketStatus({ ticket }) {
 TicketStatus.propTypes = {
   ticket: PropTypes.shape({
     owner: PropTypes.shape({
-      status: PropTypes.string,
+      status: PropTypes.string
     }),
-    refund_requests: PropTypes.arrayOf(Object),
-  }),
+    refund_requests: PropTypes.arrayOf(Object)
+  })
 };
 
 export default TicketStatus;

@@ -18,7 +18,7 @@ import MyOrdersMyTicketsWidget from "./my-orders-tickets-widget";
 import "./i18n";
 
 /** TODO: DELETE AND USE REAL DATA PULLED FROM API */
-import { user, summit } from "./__mocks__/mockData";
+import { user, summit, clientId, loginUrl } from "./__mocks__/mockData";
 
 storeAuthInfo(process.env.ACCESS_TOKEN);
 
@@ -26,6 +26,8 @@ const widgetProps = {
   user,
   summit,
   apiBaseUrl: process.env.API_BASE_URL,
+  clientId,
+  loginUrl
 };
 
 const container = document.getElementById("root");
@@ -37,6 +39,7 @@ root.render(
       user={widgetProps.user}
       summit={widgetProps.summit}
       apiBaseUrl={widgetProps.apiBaseUrl}
+      clientId={clientId}
     />
-  </div>,
+  </div>
 );

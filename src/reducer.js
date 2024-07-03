@@ -18,7 +18,7 @@ import {
   GET_USER_ORDERS,
   GET_TICKETS,
   GET_TICKETS_BY_ORDER,
-  GET_NEXT_TICKETS_BY_ORDER,
+  GET_NEXT_TICKETS_BY_ORDER
 } from "./actions";
 
 const DEFAULT_ENTITY = {
@@ -27,7 +27,7 @@ const DEFAULT_ENTITY = {
   email: "",
   company: {
     name: "",
-    id: null,
+    id: null
   },
   billing_country: "",
   billing_address: "",
@@ -38,7 +38,7 @@ const DEFAULT_ENTITY = {
   currentStep: null,
   tickets: [],
   reservation: {},
-  checkout: {},
+  checkout: {}
 };
 
 const DEFAULT_STATE = {
@@ -59,7 +59,7 @@ const DEFAULT_STATE = {
   current_page: 1,
   last_page: 1,
   per_page: 6,
-  total: 0,
+  total: 0
 };
 
 const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
@@ -76,47 +76,47 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
       return { ...state, memberOrders: payload.response.data };
     case GET_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
-      const {
-        data, total, page, per_page, last_page,
-      } = payload.response;
+      const { data, total, page, per_page, last_page } = payload.response;
       const orderToUpdate = memberOrders.filter(
-        (o) => o.id === data[0].order_id,
+        (o) => o.id === data[0].order_id
       );
       orderToUpdate[0].memberTickets = data;
-      memberOrders = memberOrders.map((mo) => (mo.id === orderToUpdate.id ? orderToUpdate : mo));
+      memberOrders = memberOrders.map((mo) =>
+        mo.id === orderToUpdate.id ? orderToUpdate : mo
+      );
       return {
         ...state,
         total,
         page,
         per_page,
         last_page,
-        memberOrders,
+        memberOrders
       };
     }
     case GET_NEXT_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
       const { data } = payload.response;
       const orderToUpdate = memberOrders.filter(
-        (o) => o.id === data[0].order_id,
+        (o) => o.id === data[0].order_id
       );
       orderToUpdate[0].memberTickets = [
         ...orderToUpdate[0].memberTickets,
-        ...data,
+        ...data
       ];
-      memberOrders = memberOrders.map((mo) => (mo.id === orderToUpdate.id ? orderToUpdate : mo));
+      memberOrders = memberOrders.map((mo) =>
+        mo.id === orderToUpdate.id ? orderToUpdate : mo
+      );
       return { ...state, memberOrders };
     }
     case GET_TICKETS: {
-      const {
-        data, current_page, total, last_page,
-      } = payload.response;
+      const { data, current_page, total, last_page } = payload.response;
       const lastEditedTicket = state.selectedTicket;
       let newData = data;
       if (lastEditedTicket) {
         const ticketToUpdate = data.find((t) => t.id === lastEditedTicket.id);
         newData = [
           ...data.filter((t) => t.id !== lastEditedTicket.id),
-          { ...ticketToUpdate, ...lastEditedTicket },
+          { ...ticketToUpdate, ...lastEditedTicket }
         ];
       }
       return {
@@ -125,7 +125,7 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
         current_page,
         total,
         last_page,
-        selectedTicket: null,
+        selectedTicket: null
       };
     }
 

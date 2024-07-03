@@ -21,17 +21,23 @@ import { RESET_STATE, setSummit, setUser } from "./actions";
 
 function MyOrdersMyTicketsWidget(props) {
   const {
-    loginUrl, supportEmail, getUserProfile, summit, apiBaseUrl, user,
+    loginUrl,
+    supportEmail,
+    getUserProfile,
+    summit,
+    apiBaseUrl,
+    user,
+    clientId
   } = props;
   const { t } = useTranslation();
 
   const { store, persistor } = useInitStore({
     loginUrl,
     supportEmail,
-    getUserProfile,
     summit,
     user,
     apiBaseUrl,
+    clientId
   });
 
   const handleBeforeLift = () => {
@@ -75,7 +81,7 @@ MyOrdersMyTicketsWidget.propTypes = {
   getUserProfile: PropTypes.func,
   summit: PropTypes.object,
   apiBaseUrl: PropTypes.string,
-  user: PropTypes.object,
+  user: PropTypes.object
 };
 
 export default MyOrdersMyTicketsWidget;
