@@ -33,8 +33,8 @@ function OrderListItem({ order, tickets, total, onPaginateClick }) {
         </span>
         {detailsRequired && (
           <span className={styles.detailsRequiredLabel}>
-            <ErrorIcon sx={{ color: "#FF9800" }} /> Some tickets in this order
-            require additional details before the ticket(s) can be issued.
+            <ErrorIcon sx={{ color: "#FF9800" }} />
+            {t("ticket_status.status_details_required")}
           </span>
         )}
       </Box>

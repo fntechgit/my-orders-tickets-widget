@@ -201,7 +201,8 @@
     "status_unassigned": "Unassigned",
     "status_complete": "Completed",
     "status_incomplete": "Incomplete",
-    "status_refund_requested": "Refund Requested"
+    "status_refund_requested": "Refund Requested",
+    "status_details_required": "Some tickets in this order require additional details before the ticket(s) can be issued."
   },
   "nav_bar": {
     "my-orders": "My Orders",
