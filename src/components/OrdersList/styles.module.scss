@@ -41,7 +41,7 @@ svg.copyIcon {
   cursor: pointer;
 }
 .orderTicketContainer {
-  margin-top: 20px;
+  margin-top: 20px !important;
   &:not(:last-child) {
     border-bottom: 1px solid #cccccc;
     margin-bottom: 20px;
