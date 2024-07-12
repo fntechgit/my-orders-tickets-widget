@@ -9,27 +9,82 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
-import React from 'react';
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import WidgetReducer from './reducer'
+ * */
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
+import { useInitStore } from "./store";
+import MyOrdersTickets from "./components/MyOrdersTickets";
+import { RESET_STATE, setSummit, setUser } from "./actions";
 
-class MyOrdersMyTicketsWidget extends React.PureComponent {
+function MyOrdersMyTicketsWidget(props) {
+  const {
+    loginUrl,
+    supportEmail,
+    getUserProfile,
+    summit,
+    apiBaseUrl,
+    user,
+    clientId
+  } = props;
+  const { t } = useTranslation();
 
-  constructor(props) {
-    super(props);
+  const { store, persistor } = useInitStore({
+    loginUrl,
+    supportEmail,
+    summit,
+    user,
+    apiBaseUrl,
+    clientId
+  });
 
-    this.store = createStore(WidgetReducer, applyMiddleware(thunk));
-  }
+  const handleBeforeLift = () => {
+    const params = new URLSearchParams(window.location.search);
+    const flush = params.has("flushState");
+    if (flush) store.dispatch({ type: RESET_STATE, payload: null });
+  };
 
-  render() {
-    return (
-      <Provider store={this.store}>
-      </Provider>
-    );
-  }
+  useEffect(() => {
+    store.dispatch(setSummit(summit));
+  }, [summit]);
+
+  useEffect(() => {
+    store.dispatch(setUser(user));
+  }, [user]);
+
+  return (
+    <Provider store={store}>
+      <PersistGate
+        onBeforeLift={handleBeforeLift}
+        loading={null}
+        persistor={persistor}
+      >
+        <Box sx={{ padding: { xs: 2, md: 0, lg: 0 } }}>
+          <h3>{t("orders.title")}</h3>
+        </Box>
+        <MyOrdersTickets
+          loginUrl={loginUrl}
+          supportEmail={supportEmail}
+          getUserProfile={getUserProfile}
+          summit={summit}
+          apiBaseUrl={apiBaseUrl}
+          user={user}
+        />
+      </PersistGate>
+    </Provider>
+  );
 }
+
+MyOrdersMyTicketsWidget.propTypes = {
+  loginUrl: PropTypes.string,
+  supportEmail: PropTypes.string,
+  getUserProfile: PropTypes.func,
+  summit: PropTypes.object,
+  apiBaseUrl: PropTypes.string,
+  user: PropTypes.object
+};
 
 export default MyOrdersMyTicketsWidget;

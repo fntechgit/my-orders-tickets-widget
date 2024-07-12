@@ -1,0 +1,30 @@
+.ticketStatusContainer {
+  .buttonPill {
+    padding: 3px 10px;
+    font-size: 0.9em;
+    border-radius: 16px;
+    background-color: #ffffff;
+  }
+  .buttonRefundRequested {
+    color: #000000;
+    font-size: 0.9em;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  .buttonIncomplete {
+    color: #ff9800;
+    border: 1px solid #ff9800;
+  }
+  .buttonComplete {
+    color: #4caf50;
+    border: 1px solid #4caf50;
+  }
+  .buttonUnassigned {
+    color: #ef5350;
+    border: 1px solid #ef5350;
+  }
+  .buttonCancelled {
+    color: rgb(128, 128, 128);
+    border: 1px solid gray;
+  }
+}
