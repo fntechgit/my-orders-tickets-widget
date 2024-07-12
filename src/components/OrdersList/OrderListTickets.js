@@ -8,6 +8,23 @@ import OrderNumber from "./OrderNumber";
 
 function OrderListTickets({ ticket }) {
   const { t } = useTranslation();
+  const getActiveButtonActions = (ticket) => {
+    if (ticket.owner?.status === "Incomplete") {
+      return (
+        <Button className={styles.viewFinishTicketButton}>
+          {t("ticket_status.finish_ticket")}
+        </Button>
+      );
+    }
+    if (ticket.owner?.status === "Complete") {
+      return (
+        <Button className={styles.viewFinishTicketButton}>
+          {t("ticket_status.view_ticket")}
+        </Button>
+      );
+    }
+    return null;
+  };
   return (
     <Grid key={ticket.id} className={styles.orderWrapper} container>
       <Grid xs={7} padding={2} item className={styles.ticketTicketType}>
@@ -56,9 +73,7 @@ function OrderListTickets({ ticket }) {
             {ticket.is_active &&
               (ticket.owner ? (
                 <>
-                  <Button className={styles.viewTicketButton}>
-                    {t("ticket_status.view_ticket")}
-                  </Button>
+                  {getActiveButtonActions(ticket)}
                   <Button className={styles.reassignButton}>
                     {t("ticket_status.reassign_ticket")}
                   </Button>

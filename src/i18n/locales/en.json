@@ -204,7 +204,8 @@
     "status_incomplete": "Incomplete",
     "status_refund_requested": "Refund Requested",
     "status_details_required": "Some tickets in this order require additional details before the ticket(s) can be issued.",
-    "status_cancelled": "Cancelled"
+    "status_cancelled": "Cancelled",
+    "finish_ticket": "Finish Ticket"
   },
   "nav_bar": {
     "my-orders": "My Orders",
