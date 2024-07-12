@@ -131,19 +131,6 @@ export const updateProfile =
 
 // TICKET ACTIONS
 
-// const normalizeTicket = (entity) => {
-//   const normalizedEntity = { ...entity };
-
-//   if (!entity.attendee_company.id) {
-//     normalizedEntity.attendee_company = entity.attendee_company.name;
-//   } else {
-//     delete normalizedEntity.attendee_company;
-//     normalizedEntity.attendee_company_id = entity.attendee_company.id;
-//   }
-
-//   return normalizedEntity;
-// };
-
 export const getUserTickets =
   ({ page = ONE, perPage = FIVE }) =>
   async (dispatch, getState, { apiBaseUrl, loginUrl }) => {

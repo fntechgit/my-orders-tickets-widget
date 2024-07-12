@@ -28,9 +28,11 @@ function OrderListTickets({ ticket }) {
             </span>
           </>
         ) : (
-          <span className={styles.ticketOwnerEmail}>
-            {t("ticket_status.attendee_status_unassigned")}
-          </span>
+          ticket.is_active && (
+            <span className={styles.ticketOwnerEmail}>
+              {t("ticket_status.attendee_status_unassigned")}
+            </span>
+          )
         )}
       </Grid>
       <Grid container>
@@ -51,20 +53,21 @@ function OrderListTickets({ ticket }) {
             align="right"
             className={styles.ticketActionButtons}
           >
-            {ticket.owner ? (
-              <>
-                <Button className={styles.viewTicketButton}>
-                  {t("ticket_status.view_ticket")}
+            {ticket.is_active &&
+              (ticket.owner ? (
+                <>
+                  <Button className={styles.viewTicketButton}>
+                    {t("ticket_status.view_ticket")}
+                  </Button>
+                  <Button className={styles.reassignButton}>
+                    {t("ticket_status.reassign_ticket")}
+                  </Button>
+                </>
+              ) : (
+                <Button className={styles.assignTicketButton}>
+                  {t("ticket_status.assign_ticket")}
                 </Button>
-                <Button className={styles.reassignButton}>
-                  {t("ticket_status.reassign_ticket")}
-                </Button>
-              </>
-            ) : (
-              <Button className={styles.assignTicketButton}>
-                {t("ticket_status.assign_ticket")}
-              </Button>
-            )}
+              ))}
           </Grid>
         </Grid>
       </Grid>

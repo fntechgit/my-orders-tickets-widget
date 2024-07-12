@@ -145,7 +145,8 @@
     "loading": "Loading your orders and tickets...",
     "empty-title": "It appears you have not placed any orders and no tickets have been assigned to you.",
     "empty-text": "If you believe this is incorrect please email <a href=\"mailto:{{support_email}}\">{{support_email}}</a>. Thank you!",
-    "view_more": "View more"
+    "view_more": "View more",
+    "view_less": "View less"
   },
   "orders": {
     "title": "My Orders with Tickets",
@@ -202,7 +203,8 @@
     "status_complete": "Completed",
     "status_incomplete": "Incomplete",
     "status_refund_requested": "Refund Requested",
-    "status_details_required": "Some tickets in this order require additional details before the ticket(s) can be issued."
+    "status_details_required": "Some tickets in this order require additional details before the ticket(s) can be issued.",
+    "status_cancelled": "Cancelled"
   },
   "nav_bar": {
     "my-orders": "My Orders",

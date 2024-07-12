@@ -6,34 +6,48 @@ import * as styles from "./styles.module.scss";
 
 function TicketStatus({ ticket }) {
   const { t } = useTranslation();
+  const isActive = ticket.is_active;
   const refund_requests = ticket.refund_requests.find(
     (r) => r.status === "Requested"
   );
-  const ticket_status_incomplete =
-    ticket.owner?.status === "Incomplete" && ticket.owner;
-  const ticket_owner = ticket.owner;
-  const ticket_complete = ticket.owner?.status === "Complete";
+  const ticket_status_incomplete = ticket.owner?.status === "Incomplete";
+  const ticket_unassigned = ticket.owner_id === 0;
+  const ticket_complete = ticket.owner && ticket.owner?.status === "Complete";
 
   return (
     <Container className={styles.ticketStatusContainer}>
-      {refund_requests && (
-        <Button className={styles.buttonRefundRequested}>
-          {t("ticket_status.status_refund_requested")}
-        </Button>
-      )}
-      {ticket_status_incomplete && (
-        <Button className={styles.buttonIncomplete}>
-          {t("ticket_status.status_incomplete")}
-        </Button>
-      )}
-      {!ticket_owner && (
-        <Button className={styles.buttonUnassigned}>
-          {t("ticket_status.status_unassigned")}
-        </Button>
-      )}
-      {ticket_complete && (
-        <Button className={styles.buttonComplete}>
-          {t("ticket_status.status_complete")}
+      {isActive ? (
+        <>
+          {refund_requests && (
+            <Button
+              className={`${styles.buttonPill} ${styles.buttonRefundRequested}`}
+            >
+              {t("ticket_status.status_refund_requested")}
+            </Button>
+          )}
+          {ticket_status_incomplete && (
+            <Button
+              className={`${styles.buttonPill} ${styles.buttonIncomplete}`}
+            >
+              {t("ticket_status.status_incomplete")}
+            </Button>
+          )}
+          {ticket_unassigned && (
+            <Button
+              className={`${styles.buttonPill} ${styles.buttonUnassigned}`}
+            >
+              {t("ticket_status.status_unassigned")}
+            </Button>
+          )}
+          {ticket_complete && (
+            <Button className={`${styles.buttonPill} ${styles.buttonComplete}`}>
+              {t("ticket_status.status_complete")}
+            </Button>
+          )}
+        </>
+      ) : (
+        <Button className={`${styles.buttonPill} ${styles.buttonCancelled}`}>
+          {t("ticket_status.status_cancelled")}
         </Button>
       )}
     </Container>

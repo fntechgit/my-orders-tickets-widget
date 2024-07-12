@@ -25,9 +25,13 @@ function MyOrdersTickets() {
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <>
-      <Box className={styles.widgetHeader}>
+      <Box
+        className={styles.widgetHeader}
+        sx={{ padding: { xs: 2, md: 0, lg: 0 } }}
+      >
         <h2 className={styles.summitTitleDate}>{name}</h2>
         <h2 className={styles.summitTitleDate}>
           {getSummitFormattedDate(summit)}

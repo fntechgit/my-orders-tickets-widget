@@ -1,4 +1,47 @@
+.orderTicketInfo {
+  display: block;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 15px 0;
+}
+.ticketNo {
+  display: block;
+  margin: 3px 0;
+  font-size: 0.9em;
+}
+.detailsRequiredLabel {
+  svg {
+    margin-top: 1px;
+    margin-right: 5px;
+  }
+  display: flex;
+  color: #ff9800;
+  font-size: 0.9em;
+}
+.orderTicketNoContainer {
+  display: inline;
+  margin: 3px 0 10px;
+  span {
+    display: inline-block;
+  }
+  .orderTicketNumber {
+    display: inline-block;
+    width: 90px;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: rtl;
+    margin-bottom: -5px;
+  }
+}
+
+svg.copyIcon {
+  color: #2196f3;
+  margin-left: 5px;
+  margin-bottom: -2px;
+  cursor: pointer;
+}
 .orderTicketContainer {
+  margin-top: 20px;
   &:not(:last-child) {
     border-bottom: 1px solid #cccccc;
     margin-bottom: 20px;
@@ -19,50 +62,9 @@
   }
   .ticketActionButtons {
     justify-content: end;
-  }
-  svg.copyIcon {
-    color: #2196f3;
-    margin-left: 5px;
-    margin-bottom: -2px;
-    cursor: pointer;
+    min-height: 36px;
   }
   .ticketListContainer {
-    .orderTicketInfo {
-      display: block;
-      margin: 10px 0;
-      color: rgba(0, 0, 0, 0.6);
-    }
-    .ticketNo {
-      display: block;
-      margin: 3px 0;
-      font-size: 0.9em;
-    }
-    .detailsRequiredLabel {
-      svg {
-        margin-top: 1px;
-        margin-right: 5px;
-      }
-      display: flex;
-      margin: 15px 0;
-      color: #ff9800;
-      font-size: 0.9em;
-    }
-    .orderTicketNoContainer {
-      display: inline;
-      margin: 3px 0 10px;
-      span {
-        display: inline-block;
-      }
-      .orderTicketNumber {
-        display: inline-block;
-        width: 90px;
-        text-wrap: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        direction: rtl;
-        margin-bottom: -5px;
-      }
-    }
     .viewMoreButton {
       display: block;
       padding: 5px 10px;

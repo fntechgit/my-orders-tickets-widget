@@ -1,25 +1,32 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
-import { Grid } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { Grid, Box } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
 import OrderListItem from "./OrderListItem";
 import OrderSummary from "../OrderSummary";
 import { ONE, getTicketsByOrder } from "../../actions";
-import { getOrderTickets } from "../../utils";
+import { getOrderTickets, getFormattedDate } from "../../utils";
+import OrderNumber from "./OrderNumber";
 import * as styles from "./styles.module.scss";
 
 function OrdersList(props) {
   const { summit, order } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { total, current_page, per_page, memberOrders } = useSelector(
+  const { per_page, last_page, memberOrders } = useSelector(
     (state) => state.widgetState || {},
     shallowEqual
+  );
+  const detailsRequired = order.memberTickets?.find(
+    (ticket) => ticket.owner?.status === "Incomplete"
   );
   const fetchTicketsByOrder = async () => {
     await dispatch(
       getTicketsByOrder({
         orderId: order.id,
-        page: current_page,
+        current_page: last_page,
         perPage: per_page
       })
     ).catch((e) => {
@@ -35,53 +42,88 @@ function OrdersList(props) {
     dispatch(
       getTicketsByOrder({
         orderId: order.id,
-        page: current_page + ONE,
+        page: order.tickets_page_current + ONE,
         perPage: per_page,
         next: true
       })
     );
 
   return (
-    <Grid
-      key={order.id}
-      container
-      rowSpacing={1}
-      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-      className={styles.orderTicketContainer}
-    >
-      <Grid
-        padding={2}
-        item
-        lg={7}
-        md={7}
-        sm={12}
-        xs={12}
-        order={{ md: 1, lg: 1 }}
-        className={styles.ticketListContainer}
+    <>
+      <Box
+        sx={{
+          padding: {
+            xs: 2,
+            md: 1,
+            lg: 0
+          }
+        }}
       >
-        <OrderListItem
-          order={order}
-          tickets={getOrderTickets(memberOrders, order.id)}
-          total={total}
-          onPaginateClick={onPaginateClick}
-        />
-      </Grid>
+        <span className={styles.orderTicketInfo}>
+          {t("orders.purchased")}: {getFormattedDate(order.created)} |{" "}
+          {t("order_summary.order_no")}:{" "}
+          <OrderNumber number={order.number} copy />
+        </span>
+        {detailsRequired && (
+          <span className={styles.detailsRequiredLabel}>
+            <ErrorIcon sx={{ color: "#FF9800" }} />
+            {t("ticket_status.status_details_required")}
+          </span>
+        )}
+      </Box>
       <Grid
-        padding={2}
-        item
-        lg={5}
-        md={5}
-        sm={12}
-        xs={12}
-        order={{ md: 1, lg: 1 }}
+        key={order.id}
+        container
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+        className={styles.orderTicketContainer}
+        sx={{
+          flexDirection: {
+            xs: "column-reverse",
+            md: "row",
+            lg: "row"
+          },
+          padding: {
+            xs: 2,
+            md: 0,
+            lg: 0
+          }
+        }}
       >
-        <OrderSummary
-          order={order}
-          summit={summit}
-          tickets={getOrderTickets(memberOrders, order.id)}
-        />
+        <Grid
+          padding={2}
+          item
+          lg={7}
+          md={7}
+          sm={12}
+          xs={12}
+          order={{ md: 1, lg: 1 }}
+          className={styles.ticketListContainer}
+        >
+          <OrderListItem
+            order={order}
+            tickets={getOrderTickets(memberOrders, order.id)}
+            total={order.tickets_total}
+            onPaginateClick={onPaginateClick}
+          />
+        </Grid>
+        <Grid
+          padding={2}
+          item
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+          order={{ md: 1, lg: 1 }}
+        >
+          <OrderSummary
+            order={order}
+            summit={summit}
+            tickets={getOrderTickets(memberOrders, order.id)}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
 

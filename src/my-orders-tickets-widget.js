@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
 import { useInitStore } from "./store";
 import MyOrdersTickets from "./components/MyOrdersTickets";
 import { RESET_STATE, setSummit, setUser } from "./actions";
@@ -61,7 +62,9 @@ function MyOrdersMyTicketsWidget(props) {
         loading={null}
         persistor={persistor}
       >
-        <h3 className="widget-title">{t("orders.title")}</h3>
+        <Box sx={{ padding: { xs: 2, md: 0, lg: 0 } }}>
+          <h3>{t("orders.title")}</h3>
+        </Box>
         <MyOrdersTickets
           loginUrl={loginUrl}
           supportEmail={supportEmail}

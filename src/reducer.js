@@ -21,44 +21,18 @@ import {
   GET_NEXT_TICKETS_BY_ORDER
 } from "./actions";
 
-const DEFAULT_ENTITY = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  company: {
-    name: "",
-    id: null
-  },
-  billing_country: "",
-  billing_address: "",
-  billing_address_two: "",
-  billing_city: "",
-  billing_state: "",
-  billing_zipcode: "",
-  currentStep: null,
-  tickets: [],
-  reservation: {},
-  checkout: {}
-};
-
 const DEFAULT_STATE = {
-  settings: {},
   summit: null,
   user: {},
   widgetLoading: false,
-  purchaseOrder: DEFAULT_ENTITY,
   memberOrders: [],
   memberTickets: [],
-  selectedTicket: null,
   errors: {},
-  stripeForm: false,
-  loaded: false,
   loading: false,
-  activeOrderId: null,
   isOrderLoading: false,
   current_page: 1,
   last_page: 1,
-  per_page: 6,
+  per_page: 5,
   total: 0
 };
 
@@ -76,18 +50,24 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
       return { ...state, memberOrders: payload.response.data };
     case GET_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
-      const { data, total, page, per_page, last_page } = payload.response;
+      const { data, total, current_page, per_page, last_page } =
+        payload.response;
       const orderToUpdate = memberOrders.filter(
-        (o) => o.id === data[0].order_id
+        (o) => o.id === data[0]?.order_id
       );
-      orderToUpdate[0].memberTickets = data;
-      memberOrders = memberOrders.map((mo) =>
-        mo.id === orderToUpdate.id ? orderToUpdate : mo
-      );
+      if (orderToUpdate.length) {
+        orderToUpdate[0].memberTickets = data;
+        orderToUpdate[0].tickets_page_current = current_page;
+        orderToUpdate[0].tickets_page_last = last_page;
+        orderToUpdate[0].tickets_total = total;
+        memberOrders = memberOrders.map((mo) =>
+          mo.id === orderToUpdate.id ? orderToUpdate : mo
+        );
+      }
       return {
         ...state,
         total,
-        page,
+        current_page,
         per_page,
         last_page,
         memberOrders
@@ -95,18 +75,24 @@ const WidgetReducer = (state = DEFAULT_STATE, { type, payload } = {}) => {
     }
     case GET_NEXT_TICKETS_BY_ORDER: {
       let { memberOrders } = state;
-      const { data } = payload.response;
+      const { data, total, current_page, last_page } = payload.response;
       const orderToUpdate = memberOrders.filter(
-        (o) => o.id === data[0].order_id
+        (o) => o.id === data[0]?.order_id
       );
-      orderToUpdate[0].memberTickets = [
-        ...orderToUpdate[0].memberTickets,
-        ...data
-      ];
-      memberOrders = memberOrders.map((mo) =>
-        mo.id === orderToUpdate.id ? orderToUpdate : mo
-      );
-      return { ...state, memberOrders };
+      if (orderToUpdate.length) {
+        orderToUpdate[0].tickets_page_current = current_page;
+        orderToUpdate[0].tickets_page_last = last_page;
+        orderToUpdate[0].tickets_total = total;
+        orderToUpdate[0].memberTickets = [
+          ...orderToUpdate[0].memberTickets,
+          ...data
+        ];
+        memberOrders = memberOrders.map((mo) =>
+          mo.id === orderToUpdate.id ? orderToUpdate : mo
+        );
+      }
+
+      return { ...state, current_page, last_page, memberOrders };
     }
     case GET_TICKETS: {
       const { data, current_page, total, last_page } = payload.response;
